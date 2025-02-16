@@ -1,10 +1,13 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import log_loss
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 
+
+error_track = list()
 
 def sigmoid(X, coef):
     z = np.dot(X, coef)
@@ -21,16 +24,18 @@ def gradient_ascent(X, y, coef, learning_rate, epochs, tol=1e-4):
 
         # Optional: Check convergence using log-loss
         loss = log_loss(y, predictions)
+        error_track.append(loss)
         if abs(prev_loss - loss) < tol:
             break
         prev_loss = loss
     return coef
 
 
-def model_fit(X, y):
+def model_fit(X, y, epochs):
     X_bias = np.c_[np.ones((X.shape[0], 1)), X]  # Add bias term
     coef = np.zeros(X_bias.shape[1])  # Initialize to zeros
-    final_coef = gradient_ascent(X_bias, y, coef, learning_rate=0.1, epochs=1000)
+    # coef = np.random.normal(0, 1, X_bias.shape[1])  # Initialize coefficients
+    final_coef = gradient_ascent(X_bias, y, coef, learning_rate=0.1, epochs=epochs)
     return final_coef
 
 
@@ -54,7 +59,8 @@ X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, 
 
 ################################################
 # Fit the model
-coef = model_fit(X_train, y_train)
+epochs = 1000
+coef = model_fit(X_train, y_train, epochs=epochs)
 print("\n",coef)
 y_pred = predict(X_test, coef)
 
@@ -70,3 +76,10 @@ from sklearn.metrics import precision_score
 print(precision_score(y_test, y_pred))
 print("-------------------------")
 print(precision_score(y_test, y_pred2))
+
+
+###############################################
+plt.plot(error_track, range(len(error_track)))
+plt.xlabel('Epochs')
+plt.ylabel('Error')
+plt.show()
