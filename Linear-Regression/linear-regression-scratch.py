@@ -33,7 +33,7 @@ def normal_equation(X, y):
 
 
 # import data
-data = pd.read_csv('./data/Salary_dataset.csv')
+data = pd.read_csv('../data/Salary_dataset.csv')
 
 # Example data
 X = data['YearsExperience'].to_numpy().reshape(-1, 1)  # Reshape X to 2D array

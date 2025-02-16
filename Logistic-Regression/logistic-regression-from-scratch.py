@@ -67,7 +67,7 @@ def predict(X, coef):
 
 
 # Load and preprocess data
-data = pd.read_csv('data/framingham.csv')
+data = pd.read_csv('../data/framingham.csv')
 data = data.dropna()
 X = data.drop('TenYearCHD', axis=1)
 y = data['TenYearCHD']
