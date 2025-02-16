@@ -33,9 +33,12 @@ def model_fit(X, y):
     final_coef = gradient_ascent(X_bias, y, coef, learning_rate=0.1, epochs=1000)
     return final_coef
 
+
 def predict(X, coef):
     X_bias = np.c_[np.ones((X.shape[0], 1)), X]
     return np.round(sigmoid(X_bias, coef))
+
+################################################
 
 # Load and preprocess data
 data = pd.read_csv('data/framingham.csv')
@@ -47,33 +50,23 @@ y = data['TenYearCHD']
 # Standardize features (excluding bias term added later)
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
-
-# Fit model
-coef = model_fit(X_scaled, y)
-print(coef)
-
 X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
 
+################################################
 # Fit the model
 coef = model_fit(X_train, y_train)
-print(coef)
-
+print("\n",coef)
 y_pred = predict(X_test, coef)
 
-#################################################"
+################################################
 lr = LogisticRegression()
-
 lr.fit(X_scaled, y)
-
-print(lr.coef_, lr.intercept_)
-
+print("\n",lr.coef_, lr.intercept_)
 y_pred2 = lr.predict(X_test)
 
 ###############################################
 from sklearn.metrics import precision_score
 
 print(precision_score(y_test, y_pred))
-print("tets")
+print("-------------------------")
 print(precision_score(y_test, y_pred2))
-
-
